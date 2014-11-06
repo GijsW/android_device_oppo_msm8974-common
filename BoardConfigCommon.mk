@@ -35,6 +35,7 @@ BOARD_KERNEL_BASE :=  0x80200000
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_MKBOOTIMG_ARGS := --ramdisk_offset 0x02000000
 BOARD_CUSTOM_BOOTIMG_MK := $(COMMON_PATH)/mkbootimg.mk
+TARGET_KERNEL_SOURCE := kernel/oppo/msm8974
 
 BOARD_BOOTIMAGE_PARTITION_SIZE := 0x00F00000
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 0x00F00000
@@ -49,7 +50,6 @@ TARGET_USES_QCOM_BSP := true
 COMMON_GLOBAL_CFLAGS += -DQCOM_HARDWARE -DQCOM_BSP
 
 # Display
-TARGET_QCOM_DISPLAY_VARIANT := caf-bfam
 USE_OPENGL_RENDERER := true
 TARGET_USES_ION := true
 TARGET_USES_C2D_COMPOSITION := true
@@ -60,11 +60,9 @@ BOARD_USES_QC_TIME_SERVICES := true
 
 # Audio/media
 BOARD_USES_ALSA_AUDIO:= true
-TARGET_QCOM_AUDIO_VARIANT := caf
 AUDIO_FEATURE_DISABLED_DS1_DOLBY_DDP := true
 AUDIO_FEATURE_DISABLED_FM := true
 AUDIO_FEATURE_DISABLED_MULTI_VOICE_SESSIONS := true
-TARGET_QCOM_MEDIA_VARIANT := caf-bfam
 TARGET_ENABLE_QC_AV_ENHANCEMENTS := true
 
 # Camera
@@ -92,6 +90,25 @@ WIFI_DRIVER_FW_PATH_AP           := "ap"
 WIFI_DRIVER_MODULE_PATH          := "/system/lib/modules/wlan.ko"
 WIFI_DRIVER_MODULE_NAME          := "wlan"
 
+# SELinux
+BOARD_SEPOLICY_DIRS += \
+   device/oppo/msm8974-common/sepolicy
+
+# The list below is order dependent
+BOARD_SEPOLICY_UNION += \
+    file.te \
+    device.te \
+    app.te \
+    cne.te \
+    qmux.te \
+    mpdecision.te \
+    thermald.te \
+    ueventd.te \
+    vold.te \
+    file_contexts \
+    genfs_contexts \
+    te_macros
+
 BOARD_EGL_CFG := $(COMMON_PATH)/configs/egl.cfg
 
 # Compatibility with pre-kitkat Qualcomm sensor HALs
@@ -107,15 +124,6 @@ BOARD_CHARGER_RES := $(COMMON_PATH)/charger/images
 # Use this flag if the board has a ext4 partition larger than 2gb
 BOARD_HAS_LARGE_FILESYSTEM := true
 TARGET_USERIMAGES_USE_EXT4 := true
-
-# TWRP specific build flags
-DEVICE_RESOLUTION := 1080x1920
-RECOVERY_GRAPHICS_USE_LINELENGTH := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGBX_8888"
-TW_NO_USB_STORAGE := true
-TW_INCLUDE_JB_CRYPTO := true
-TW_NO_SCREEN_BLANK := true
-BOARD_USE_CUSTOM_RECOVERY_FONT := \"roboto_23x41.h\"
 
 # External apps on SD
 TARGET_EXTERNAL_APPS = sdcard1
